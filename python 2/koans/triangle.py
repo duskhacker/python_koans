@@ -17,8 +17,22 @@
 #   about_triangle_project_2.py
 #
 def triangle(a, b, c):
-    # DELETE 'PASS' AND WRITE THIS CODE
-    pass
+    if _is_invalid_triangle(a,b,c):
+        raise TriangleError
+    
+    if a == b == c:
+        return 'equilateral'
+    elif a == b or b == c or c==a:
+        return 'isosceles'
+    elif a != b and b != c and c != a:
+        return 'scalene'
+
+def _is_invalid_triangle(*values):
+    values = list(values)
+    values.sort()
+    if values[0] + values[1] > values[2]:
+        return False
+    return True
 
 # Error class used in part 2.  No need to change this code.
 class TriangleError(StandardError):
