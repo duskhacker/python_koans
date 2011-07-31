@@ -21,11 +21,34 @@ from runner.koan import *
 class Proxy(object):
     def __init__(self, target_object):
         # WRITE CODE HERE
-        
+        self._proxy_calls = []
+
         #initialize '_obj' attribute last. Trust me on this!
         self._obj = target_object
 
-    # WRITE CODE HERE                                   
+    # WRITE CODE HERE
+    def __getattr__(self, item):
+        self.log(item)
+        return getattr(self._obj, item)
+
+    def __setattr__(self, key, value):
+         if key in ['_obj','_proxy_calls']:
+           return object.__setattr__(self, key, value)
+         else:
+           self.log("%s=" % key)
+           return self._obj.__setattr__(key, value)
+
+    def log(self, item):
+        self._proxy_calls.append(item)
+
+    def messages(self):
+        return self._proxy_calls
+
+    def was_called(self, item):
+        return item in self._proxy_calls
+
+    def number_of_times_called(self, item):
+        return self._proxy_calls.count(item)
 
 # The proxy object should pass the following Koan:
 #
